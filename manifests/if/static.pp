@@ -23,6 +23,9 @@
 #   $dns2           - optional
 #   $domain         - optional
 #   $scope          - optional
+#   $zone           - optional
+#   $metric         - optional
+#   $defroute       - optional
 #
 # === Actions:
 #
@@ -69,7 +72,10 @@ define network::if::static (
   $dns2 = undef,
   $domain = undef,
   $linkdelay = undef,
-  $scope = undef
+  $scope = undef,
+  $zone = undef,
+  $defroute = undef,
+  $metric = undef
 ) {
   # Validate our data
   if ! is_ip_address($ipaddress) { fail("${ipaddress} is not an IP address.") }
@@ -93,26 +99,29 @@ define network::if::static (
   validate_bool($manage_hwaddr)
 
   network_if_base { $title:
-    ensure        => $ensure,
-    ipv6init      => $ipv6init,
-    ipaddress     => $ipaddress,
-    ipv6address   => $ipv6address,
-    netmask       => $netmask,
-    gateway       => $gateway,
-    ipv6gateway   => $ipv6gateway,
-    ipv6autoconf  => $ipv6autoconf,
-    macaddress    => $macaddy,
+    ensure       => $ensure,
+    ipv6init     => $ipv6init,
+    ipaddress    => $ipaddress,
+    ipv6address  => $ipv6address,
+    netmask      => $netmask,
+    gateway      => $gateway,
+    ipv6gateway  => $ipv6gateway,
+    ipv6autoconf => $ipv6autoconf,
+    macaddress   => $macaddy,
     manage_hwaddr => $manage_hwaddr,
-    bootproto     => 'none',
-    userctl       => $userctl,
-    mtu           => $mtu,
-    ethtool_opts  => $ethtool_opts,
-    peerdns       => $peerdns,
-    ipv6peerdns   => $ipv6peerdns,
-    dns1          => $dns1,
-    dns2          => $dns2,
-    domain        => $domain,
-    linkdelay     => $linkdelay,
-    scope         => $scope,
+    bootproto    => 'none',
+    userctl      => $userctl,
+    mtu          => $mtu,
+    ethtool_opts => $ethtool_opts,
+    peerdns      => $peerdns,
+    ipv6peerdns  => $ipv6peerdns,
+    dns1         => $dns1,
+    dns2         => $dns2,
+    domain       => $domain,
+    linkdelay    => $linkdelay,
+    scope        => $scope,
+    zone         => $zone,
+    defroute     => $defroute,
+    metric       => $metric,
   }
 } # define network::if::static
