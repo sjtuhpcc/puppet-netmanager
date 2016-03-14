@@ -15,9 +15,6 @@
 #   $peerdns         - optional
 #   $linkdelay       - optional
 #   $check_link_down - optional
-#   $zone            - optional
-#   $metric          - optional
-#   $defroute        - optional
 #
 # === Actions:
 #
@@ -55,10 +52,7 @@ define network::if::dynamic (
   $ethtool_opts    = undef,
   $peerdns         = false,
   $linkdelay       = undef,
-  $check_link_down = false,
-  $defroute        = undef,
-  $zone            = undef,
-  $metric          = undef
+  $check_link_down = false
 ) {
   # Validate our regular expressions
   $states = [ '^up$', '^down$' ]
@@ -91,8 +85,5 @@ define network::if::dynamic (
     peerdns         => $peerdns,
     linkdelay       => $linkdelay,
     check_link_down => $check_link_down,
-    defroute        => $defroute,
-    zone            => $zone,
-    metric          => $metric,
   }
 } # define network::if::dynamic

@@ -61,9 +61,6 @@ describe 'network::if::dynamic', :type => 'define' do
       :peerdns         => true,
       :linkdelay       => '5',
       :check_link_down => true,
-      :defroute     => 'yes',
-      :metric       => '10',
-      :zone         => 'trusted',
     }
     end
     let :facts do {
@@ -92,9 +89,6 @@ describe 'network::if::dynamic', :type => 'define' do
         'ETHTOOL_OPTS="speed 100 duplex full autoneg off"',
         'USERCTL=yes',
         'LINKDELAY=5',
-        'DEFROUTE=yes',
-        'ZONE=trusted',
-        'METRIC=10',
         'NM_CONTROLLED=no',
       ])
     end

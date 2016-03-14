@@ -12,9 +12,6 @@
 #   $mtu          - optional
 #   $ethtool_opts - optional
 #   $bonding_opts - optional
-#   $zone         - optional
-#   $metric       - optional
-#   $defroute     - optional
 #
 # === Actions:
 #
@@ -53,10 +50,7 @@ define network::bond::static (
   $ipv6peerdns = false,
   $dns1 = undef,
   $dns2 = undef,
-  $domain = undef,
-  $zone = undef,
-  $defroute = undef,
-  $metric = undef
+  $domain = undef
 ) {
   # Validate our regular expressions
   $states = [ '^up$', '^down$' ]
@@ -89,9 +83,6 @@ define network::bond::static (
     dns1         => $dns1,
     dns2         => $dns2,
     domain       => $domain,
-    zone         => $zone,
-    defroute     => $defroute,
-    metric       => $metric,
   }
 
   # Only install "alias bondN bonding" on old OSs that support

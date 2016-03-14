@@ -34,10 +34,7 @@
 define network::bond::slave (
   $macaddress,
   $master,
-  $ethtool_opts = undef,
-  $zone = undef,
-  $defroute = undef,
-  $metric = undef
+  $ethtool_opts = undef
 ) {
   # Validate our data
   if ! is_mac_address($macaddress) {
