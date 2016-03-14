@@ -6,6 +6,7 @@
 #
 #   $ensure          - required - up|down
 #   $macaddress      - optional - defaults to macaddress_$title
+#   $manage_hwaddr   - optional - defaults to true
 #   $bootproto       - optional - defaults to "dhcp"
 #   $userctl         - optional - defaults to false
 #   $mtu             - optional
@@ -14,7 +15,6 @@
 #   $peerdns         - optional
 #   $linkdelay       - optional
 #   $check_link_down - optional
-#   $nmcontrol       - optional - defaults to false
 #   $zone            - optional
 #   $metric          - optional
 #   $defroute        - optional
@@ -47,6 +47,7 @@
 define network::if::dynamic (
   $ensure,
   $macaddress      = undef,
+  $manage_hwaddr   = true,
   $bootproto       = 'dhcp',
   $userctl         = false,
   $mtu             = undef,
@@ -56,7 +57,6 @@ define network::if::dynamic (
   $linkdelay       = undef,
   $check_link_down = false,
   $defroute        = undef,
-  $nmcontrol       = false,
   $zone            = undef,
   $metric          = undef
 ) {
@@ -74,6 +74,7 @@ define network::if::dynamic (
   # Validate booleans
   validate_bool($userctl)
   validate_bool($peerdns)
+  validate_bool($manage_hwaddr)
 
   network_if_base { $title:
     ensure          => $ensure,
@@ -81,6 +82,7 @@ define network::if::dynamic (
     netmask         => '',
     gateway         => '',
     macaddress      => $macaddy,
+    manage_hwaddr   => $manage_hwaddr,
     bootproto       => $bootproto,
     userctl         => $userctl,
     mtu             => $mtu,
@@ -90,7 +92,6 @@ define network::if::dynamic (
     linkdelay       => $linkdelay,
     check_link_down => $check_link_down,
     defroute        => $defroute,
-    nmcontrol       => $nmcontrol,
     zone            => $zone,
     metric          => $metric,
   }
