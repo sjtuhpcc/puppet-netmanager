@@ -3,7 +3,7 @@ include network
 # normal interface - static
 network::if::static { 'test1':
   ensure       => 'up',
-  device       => 'eth1'
+  device       => 'eth1',
   ipaddress    => '1.2.3.4',
   netmask      => '255.255.255.0',
   gateway      => '1.2.3.1',
