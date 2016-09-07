@@ -198,8 +198,8 @@ define network_if_base (
   }
 
   file { "ifcfg-${ifname}":
-    ensure => 'present',
-    path => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
+    ensure  => 'present',
+    path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
