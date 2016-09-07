@@ -31,10 +31,10 @@ class network {
     }
   }
 
-  service { 'network':
+  service { 'NetworkManager':
     ensure     => 'running',
     enable     => true,
-    hasrestart => true,
+    hasrestart => false,
     hasstatus  => true,
     provider   => 'redhat',
   }
@@ -51,6 +51,8 @@ class network {
 # === Parameters:
 #
 #   $ensure          - required - up|down
+#   $ifname          - required
+#   $device          - required
 #   $ipaddress       - required
 #   $netmask         - required
 #   $macaddress      - required
@@ -103,6 +105,8 @@ class network {
 #
 define network_if_base (
   $ensure,
+  $ifname,
+  $device,
   $ipaddress,
   $netmask,
   $macaddress,
@@ -152,8 +156,6 @@ define network_if_base (
 
   include '::network'
 
-  $interface = $name
-
   # Deal with the case where $dns2 is non-empty and $dns1 is empty.
   if $dns2 {
     if !$dns1 {
@@ -184,26 +186,48 @@ define network_if_base (
     $iftemplate = template('network/ifcfg-eth.erb')
   }
 
-  if $flush {
+   if $flush {
     exec { 'network-flush':
       user        => 'root',
-      command     => "ip addr flush dev ${interface}",
+      command     => "ip addr flush dev ${device}",
       refreshonly => true,
-      subscribe   => File["ifcfg-${interface}"],
-      before      => Service['network'],
+      subscribe   => File["ifcfg-${ifname}"],
+      before      => Exec['nmcli_manage'],
       path        => '/sbin:/usr/sbin',
     }
   }
 
-  file { "ifcfg-${interface}":
-    ensure  => 'present',
+  file { "ifcfg-${ifname}":
+    path => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
+    ensure => 'present',
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    path    => "/etc/sysconfig/network-scripts/ifcfg-${interface}",
     content => $iftemplate,
-    notify  => Service['network'],
+    notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean'],
   }
+  
+  
+  exec { 'nmcli_clean':
+        path        => '/usr/bin:/bin:/usr/sbin:/sbin',
+        command => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
+        onlyif => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'"
+  }
+
+  exec { 'nmcli_config':
+      path        => '/usr/bin:/bin:/usr/sbin:/sbin',
+      command => "nmcli connection load /etc/sysconfig/network-scripts/ifcfg-${ifname}",
+      refreshonly => true,
+      before      => Exec['nmcli_manage'],
+    }
+
+  exec { 'nmcli_manage':
+      path        => '/usr/bin:/bin:/usr/sbin:/sbin',
+      command => "nmcli connection ${ensure} ${ifname}",
+      refreshonly => true,
+      before      => Exec['nmcli_clean'],
+    }
+
 } # define network_if_base
 
 # == Definition: validate_ip_address

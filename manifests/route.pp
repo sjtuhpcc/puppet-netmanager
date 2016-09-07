@@ -14,7 +14,7 @@
 #
 # === Requires:
 #
-#   File["ifcfg-$name"]
+#   File["ifcfg-$ifname"]
 #   Service['network']
 #
 # === Sample Usage:
@@ -51,16 +51,16 @@ define network::route (
 
   include '::network'
 
-  $interface = $name
+  $ifname = $title
 
-  file { "route-${interface}":
+  file { "route-${ifname}":
     ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    path    => "/etc/sysconfig/network-scripts/route-${interface}",
+    path    => "/etc/sysconfig/network-scripts/route-${ifname}",
     content => template('network/route-eth.erb'),
-    before  => File["ifcfg-${interface}"],
-    notify  => Service['network'],
+    before  => File["ifcfg-${ifname}"],
+    notify  => Exec["nmcli_manage"],
   }
 } # define network::route

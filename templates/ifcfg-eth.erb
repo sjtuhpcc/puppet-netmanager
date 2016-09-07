@@ -1,7 +1,8 @@
 ###
 ### File managed by Puppet
 ###
-DEVICE=<%= @interface %>
+DEVICE=<%= @device %>
+NAME=<%= @ifname %>
 BOOTPROTO=<%= @bootproto %>
 <% if @manage_hwaddr and @macaddress and @macaddress != '' -%>
 HWADDR=<%= @macaddress %>
@@ -66,4 +67,4 @@ check_link_down() {
 <% end -%>
 <% if @metric %>METRIC=<%= @metric %>
 <% end -%>
-NM_CONTROLLED=no
+NM_CONTROLLED=yes

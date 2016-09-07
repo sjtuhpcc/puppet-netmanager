@@ -5,6 +5,8 @@
 # === Parameters:
 #
 #   $ensure         - required - up|down
+#   $ifname         - optional - default $title 
+#   $device         - required - device name
 #   $ipaddress      - required
 #   $netmask        - required
 #   $gateway        - optional
@@ -30,12 +32,13 @@
 #
 # === Actions:
 #
-# Deploys the file /etc/sysconfig/network-scripts/ifcfg-$name.
+# Deploys the file /etc/sysconfig/network-scripts/ifcfg-$ifname.
 #
 # === Sample Usage:
 #
-#   network::if::static { 'eth0':
+#   network::if::static { 'test0':
 #     ensure      => 'up',
+#     device      => 'eth0',
 #     ipaddress   => '10.21.30.248',
 #     netmask     => '255.255.255.128',
 #     macaddress  => $::macaddress_eth0,
@@ -55,6 +58,7 @@
 #
 define network::if::static (
   $ensure,
+  $device,
   $ipaddress,
   $netmask,
   $gateway = undef,
@@ -95,8 +99,8 @@ define network::if::static (
 
   if ! is_mac_address($macaddress) {
     # Strip off any tailing VLAN (ie eth5.90 -> eth5).
-    $title_clean = regsubst($title,'^(\w+)\.\d+$','\1')
-    $macaddy = getvar("::macaddress_${title_clean}")
+    $device_clean = regsubst($device,'^(\w+)\.\d+$','\1')
+    $macaddy = getvar("::macaddress_${device_clean}")
   } else {
     $macaddy = $macaddress
   }
@@ -111,6 +115,8 @@ define network::if::static (
 
   network_if_base { $title:
     ensure          => $ensure,
+    ifname          => $title,
+    device          => $device,
     ipv6init        => $ipv6init,
     ipaddress       => $ipaddress,
     ipv6address     => $primary_ipv6address,
