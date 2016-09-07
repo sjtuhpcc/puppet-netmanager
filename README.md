@@ -1,17 +1,8 @@
 Puppet Network Module
 =====================
 
-Parent Repo Status
-------------------
-
 master branch [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-network.png?branch=master)](http://travis-ci.org/razorsedge/puppet-network)
 develop branch [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-network.png?branch=develop)](http://travis-ci.org/razorsedge/puppet-network)
-
-Current Repo Status
--------------------
-
-master branch [![Build Status](https://secure.travis-ci.org/gorbyo/puppet-network.png?branch=master)](http://travis-ci.org/gorbyo/puppet-network)
-develop branch [![Build Status](https://secure.travis-ci.org/gorbyo/puppet-network.png?branch=develop)](http://travis-ci.org/gorbyo/puppet-network)
 
 Introduction
 ------------
@@ -245,6 +236,17 @@ Normal interface - VLAN - static (minimal):
       ensure    => 'up',
       ipaddress => '10.2.3.248',
       netmask   => '255.255.255.0',
+    }
+
+Flush IP addresses:
+
+Network scripts on RHEL7 do not flush IP addresses, so you eventually end up with multiple of them, passing `flush => true` will run `ip addr flush` on given interface before notifying the network service.
+
+    network::if::static { 'eth0':
+      ensure    => 'up',
+      ipaddress => '1.2.3.4',
+      netmask   => '255.255.255.0',
+      flush     => true,
     }
 
 Hiera

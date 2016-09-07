@@ -23,6 +23,7 @@
 #   $dns2           - optional
 #   $domain         - optional
 #   $scope          - optional
+#   $flush          - optional
 #   $zone           - optional
 #   $metric         - optional
 #   $defroute       - optional
@@ -73,6 +74,7 @@ define network::if::static (
   $domain = undef,
   $linkdelay = undef,
   $scope = undef,
+  $flush = false,
   $zone = undef,
   $defroute = undef,
   $metric = undef
@@ -97,6 +99,7 @@ define network::if::static (
   validate_bool($peerdns)
   validate_bool($ipv6peerdns)
   validate_bool($manage_hwaddr)
+  validate_bool($flush)
 
   network_if_base { $title:
     ensure        => $ensure,
@@ -120,6 +123,7 @@ define network::if::static (
     domain        => $domain,
     linkdelay     => $linkdelay,
     scope         => $scope,
+    flush         => $flush,
     zone          => $zone,
     defroute      => $defroute,
     metric        => $metric,
