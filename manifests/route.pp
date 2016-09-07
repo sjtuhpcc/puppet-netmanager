@@ -61,6 +61,6 @@ define network::route (
     path    => "/etc/sysconfig/network-scripts/route-${ifname}",
     content => template('network/route-eth.erb'),
     before  => File["ifcfg-${ifname}"],
-    notify  => Exec["nmcli_manage"],
+    notify  => Exec['nmcli_manage'],
   }
 } # define network::route

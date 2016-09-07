@@ -51,7 +51,7 @@ class network {
 # === Parameters:
 #
 #   $ensure          - required - up|down
-#   $ifname          - required
+#   $ifname          - optional
 #   $device          - required
 #   $ipaddress       - required
 #   $netmask         - required
@@ -198,8 +198,8 @@ define network_if_base (
   }
 
   file { "ifcfg-${ifname}":
-    path => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     ensure => 'present',
+    path => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
@@ -208,24 +208,24 @@ define network_if_base (
   }
 
   exec { 'nmcli_clean':
-        path      => '/usr/bin:/bin:/usr/sbin:/sbin',
-        command   => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
-        onlyif    => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'"
+    path    => '/usr/bin:/bin:/usr/sbin:/sbin',
+    command => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
+    onlyif  => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'"
   }
 
   exec { 'nmcli_config':
-      path        => '/usr/bin:/bin:/usr/sbin:/sbin',
-      command     => "nmcli connection load /etc/sysconfig/network-scripts/ifcfg-${ifname}",
-      refreshonly => true,
-      before      => Exec['nmcli_manage'],
-    }
+    path        => '/usr/bin:/bin:/usr/sbin:/sbin',
+    command     => "nmcli connection load /etc/sysconfig/network-scripts/ifcfg-${ifname}",
+    refreshonly => true,
+    before      => Exec['nmcli_manage'],
+  }
 
   exec { 'nmcli_manage':
-      path        => '/usr/bin:/bin:/usr/sbin:/sbin',
-      command     => "nmcli connection ${ensure} ${ifname}",
-      refreshonly => true,
-      before      => Exec['nmcli_clean'],
-    }
+    path        => '/usr/bin:/bin:/usr/sbin:/sbin',
+    command     => "nmcli connection ${ensure} ${ifname}",
+    refreshonly => true,
+    before      => Exec['nmcli_clean'],
+  }
 
 } # define network_if_base
 
