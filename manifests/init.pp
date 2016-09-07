@@ -186,7 +186,7 @@ define network_if_base (
     $iftemplate = template('network/ifcfg-eth.erb')
   }
 
-   if $flush {
+  if $flush {
     exec { 'network-flush':
       user        => 'root',
       command     => "ip addr flush dev ${device}",
@@ -206,24 +206,23 @@ define network_if_base (
     content => $iftemplate,
     notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean'],
   }
-  
-  
+
   exec { 'nmcli_clean':
-        path        => '/usr/bin:/bin:/usr/sbin:/sbin',
-        command => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
-        onlyif => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'"
+        path      => '/usr/bin:/bin:/usr/sbin:/sbin',
+        command   => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
+        onlyif    => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'"
   }
 
   exec { 'nmcli_config':
       path        => '/usr/bin:/bin:/usr/sbin:/sbin',
-      command => "nmcli connection load /etc/sysconfig/network-scripts/ifcfg-${ifname}",
+      command     => "nmcli connection load /etc/sysconfig/network-scripts/ifcfg-${ifname}",
       refreshonly => true,
       before      => Exec['nmcli_manage'],
     }
 
   exec { 'nmcli_manage':
       path        => '/usr/bin:/bin:/usr/sbin:/sbin',
-      command => "nmcli connection ${ensure} ${ifname}",
+      command     => "nmcli connection ${ensure} ${ifname}",
       refreshonly => true,
       before      => Exec['nmcli_clean'],
     }
