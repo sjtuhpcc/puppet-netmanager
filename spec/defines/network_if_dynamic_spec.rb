@@ -19,6 +19,7 @@ describe 'network::if::dynamic', :type => 'define' do
     let(:title) { 'eth99' }
     let :params do {
       :ensure => 'up',
+      :device => 'eth99',
     }
     end
     let :facts do {
@@ -42,7 +43,7 @@ describe 'network::if::dynamic', :type => 'define' do
         'ONBOOT=yes',
         'HOTPLUG=yes',
         'TYPE=Ethernet',
-        'NM_CONTROLLED=no',
+        'NM_CONTROLLED=yes',
       ])
     end
     it { should contain_service('network') }

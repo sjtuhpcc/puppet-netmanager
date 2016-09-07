@@ -5,36 +5,39 @@ require 'spec_helper'
 describe 'network::if::static', :type => 'define' do
 
   context 'incorrect value: ipaddress' do
-    let(:title) { 'eth77' }
+    let(:title) { 'test77' }
     let :params do {
       :ensure    => 'up',
+      :device    => 'eth77',
       :ipaddress => 'notAnIP',
       :netmask   => '255.255.255.0',
     }
     end
     it 'should fail' do
-      expect {should contain_file('ifcfg-eth77')}.to raise_error(Puppet::Error, /notAnIP is not an IP address\./)
+      expect {should contain_file('ifcfg-test77')}.to raise_error(Puppet::Error, /notAnIP is not an IP address\./)
     end
   end
 
   context 'incorrect value: ipv6address' do
-    let(:title) { 'eth77' }
+    let(:title) { 'test77' }
     let :params do {
       :ensure      => 'up',
+      :device    => 'eth77',
       :ipaddress   => '1.2.3.4',
       :netmask     => '255.255.255.0',
       :ipv6address => 'notAnIP',
     }
     end
     it 'should fail' do
-      expect {should contain_file('ifcfg-eth77')}.to raise_error(Puppet::Error, /notAnIP is not an IPv6 address\./)
+      expect {should contain_file('ifcfg-test77')}.to raise_error(Puppet::Error, /notAnIP is not an IPv6 address\./)
     end
   end
 
   context 'incorrect hash value: ipv6address' do
-    let(:title) { 'eth77' }
+    let(:title) { 'test77' }
     let :params do {
       :ensure      => 'up',
+      :device    => 'eth77',
       :ipaddress   => '1.2.3.4',
       :netmask     => '255.255.255.0',
       :ipv6address => { 'notAn' => 'IP' },
@@ -43,14 +46,15 @@ describe 'network::if::static', :type => 'define' do
     it 'should fail' do
       # there are major differences in the way that different ruby versions translate a hash into a string
       # which makes it hard to match the whole string
-      expect {should contain_file('ifcfg-eth77')}.to raise_error(Puppet::Error, /.*notAn.*IP.* is not an IPv6 address\./)
+      expect {should contain_file('ifcfg-test77')}.to raise_error(Puppet::Error, /.*notAn.*IP.* is not an IPv6 address\./)
     end
   end
 
   context 'incorrect value: ipv6address in array' do
-    let(:title) { 'eth77' }
+    let(:title) { 'test77' }
     let :params do {
       :ensure      => 'up',
+      :device    => 'eth77',
       :ipaddress   => '1.2.3.4',
       :netmask     => '255.255.255.0',
       :ipv6address => [
@@ -61,14 +65,15 @@ describe 'network::if::static', :type => 'define' do
     }
     end
     it 'should fail' do
-      expect {should contain_file('ifcfg-eth77')}.to raise_error(Puppet::Error, /notAnIP is not an IP\(v6\) address\./)
+      expect {should contain_file('ifcfg-test77')}.to raise_error(Puppet::Error, /notAnIP is not an IP\(v6\) address\./)
     end
   end
 
   context 'required parameters' do
-    let(:title) { 'eth1' }
+    let(:title) { 'test1' }
     let :params do {
       :ensure    => 'up',
+      :device    => 'eth1',
       :ipaddress => '1.2.3.4',
       :netmask   => '255.255.255.0',
     }
@@ -78,16 +83,16 @@ describe 'network::if::static', :type => 'define' do
       :macaddress_eth1 => 'fe:fe:fe:aa:aa:aa',
     }
     end
-    it { should contain_file('ifcfg-eth1').with(
+    it { should contain_file('ifcfg-test1').with(
       :ensure => 'present',
       :mode   => '0644',
       :owner  => 'root',
       :group  => 'root',
-      :path   => '/etc/sysconfig/network-scripts/ifcfg-eth1',
+      :path   => '/etc/sysconfig/network-scripts/ifcfg-test1',
       :notify => 'Service[network]'
     )}
-    it 'should contain File[ifcfg-eth1] with required contents' do
-      verify_contents(catalogue, 'ifcfg-eth1', [
+    it 'should contain File[ifcfg-test1] with required contents' do
+      verify_contents(catalogue, 'ifcfg-test1', [
         'DEVICE=eth1',
         'BOOTPROTO=none',
         'HWADDR=fe:fe:fe:aa:aa:aa',
@@ -104,9 +109,10 @@ describe 'network::if::static', :type => 'define' do
   end
 
   context 'optional parameters' do
-    let(:title) { 'eth1' }
+    let(:title) { 'test1' }
     let :params do {
       :ensure       => 'down',
+      :device       => 'eth1',
       :ipaddress    => '1.2.3.4',
       :netmask      => '255.255.255.0',
       :gateway      => '1.2.3.1',
@@ -135,16 +141,16 @@ describe 'network::if::static', :type => 'define' do
       :macaddress_eth1 => 'fe:fe:fe:aa:aa:aa',
     }
     end
-    it { should contain_file('ifcfg-eth1').with(
+    it { should contain_file('ifcfg-test1').with(
       :ensure => 'present',
       :mode   => '0644',
       :owner  => 'root',
       :group  => 'root',
-      :path   => '/etc/sysconfig/network-scripts/ifcfg-eth1',
+      :path   => '/etc/sysconfig/network-scripts/ifcfg-test1',
       :notify => 'Service[network]'
     )}
-    it 'should contain File[ifcfg-eth1] with required contents' do
-      verify_contents(catalogue, 'ifcfg-eth1', [
+    it 'should contain File[ifcfg-test1] with required contents' do
+      verify_contents(catalogue, 'ifcfg-test1', [
         'DEVICE=eth1',
         'BOOTPROTO=none',
         'HWADDR=ef:ef:ef:ef:ef:ef',
@@ -181,6 +187,7 @@ describe 'network::if::static', :type => 'define' do
     let(:title) { 'eth6.203' }
     let :params do {
       :ensure    => 'up',
+      :device    => 'eth6',
       :ipaddress => '1.2.3.4',
       :netmask   => '255.255.255.0',
     }
