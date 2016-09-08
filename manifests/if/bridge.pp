@@ -31,6 +31,7 @@
 #
 define network::if::bridge (
   $ensure,
+  $device,
   $bridge,
   $mtu = undef,
   $ethtool_opts = undef,
@@ -49,6 +50,8 @@ define network::if::bridge (
 
   network_if_base { $title:
     ensure       => $ensure,
+    ifname       => $title,
+    device       => $title,
     ipaddress    => '',
     netmask      => '',
     gateway      => '',

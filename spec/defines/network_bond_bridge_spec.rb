@@ -34,7 +34,7 @@ describe 'network::bond::bridge', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-bond0',
-      :notify => 'Service[network]'
+      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
     )}
     it 'should contain File[ifcfg-bond0] with required contents' do
       verify_contents(catalogue, 'ifcfg-bond0', [
@@ -46,10 +46,10 @@ describe 'network::bond::bridge', :type => 'define' do
         'BONDING_OPTS="miimon=100"',
         'PEERDNS=no',
         'BRIDGE=br0',
-        'NM_CONTROLLED=no',
+        'NM_CONTROLLED=yes',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
     it { should_not contain_augeas('modprobe.conf_bond0') }
 
     context 'on an older operatingsystem with /etc/modprobe.conf' do
@@ -112,7 +112,7 @@ describe 'network::bond::bridge', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-bond0',
-      :notify => 'Service[network]'
+      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
     )}
     it 'should contain File[ifcfg-bond0] with required contents' do
       verify_contents(catalogue, 'ifcfg-bond0', [
@@ -125,10 +125,10 @@ describe 'network::bond::bridge', :type => 'define' do
         'BONDING_OPTS="mode=active-backup miimon=100"',
         'ETHTOOL_OPTS="speed 1000 duplex full autoneg off"',
         'BRIDGE=br6',
-        'NM_CONTROLLED=no',
+        'NM_CONTROLLED=yes',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
     it { should_not contain_augeas('modprobe.conf_bond0') }
   end
 

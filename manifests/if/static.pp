@@ -116,7 +116,7 @@ define network::if::static (
   network_if_base { $title:
     ensure          => $ensure,
     ifname          => $title,
-    device          => $device,
+    device          => $title,
     ipv6init        => $ipv6init,
     ipaddress       => $ipaddress,
     ipv6address     => $primary_ipv6address,

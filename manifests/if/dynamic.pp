@@ -84,7 +84,7 @@ define network::if::dynamic (
   network_if_base { $title:
     ensure          => $ensure,
     ifname          => $title,
-    device          => $device,
+    device          => $title,
     ipaddress       => '',
     netmask         => '',
     gateway         => '',

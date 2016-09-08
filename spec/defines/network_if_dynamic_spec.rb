@@ -5,18 +5,19 @@ require 'spec_helper'
 describe 'network::if::dynamic', :type => 'define' do
 
   context 'incorrect value: ensure' do
-    let(:title) { 'eth77' }
+    let(:title) { 'test77' }
     let :params do {
       :ensure => 'blah',
+      :device => 'eth77',
     }
     end
     it 'should fail' do
-      expect {should contain_file('ifcfg-eth77')}.to raise_error(Puppet::Error, /\$ensure must be either "up" or "down"./)
+      expect {should contain_file('ifcfg-test77')}.to raise_error(Puppet::Error, /\$ensure must be either "up" or "down"./)
     end
   end
 
   context 'required parameters' do
-    let(:title) { 'eth99' }
+    let(:title) { 'test99' }
     let :params do {
       :ensure => 'up',
       :device => 'eth99',
@@ -27,16 +28,16 @@ describe 'network::if::dynamic', :type => 'define' do
       :macaddress_eth99 => 'ff:aa:ff:aa:ff:aa',
     }
     end
-    it { should contain_file('ifcfg-eth99').with(
+    it { should contain_file('ifcfg-test99').with(
       :ensure => 'present',
       :mode   => '0644',
       :owner  => 'root',
       :group  => 'root',
-      :path   => '/etc/sysconfig/network-scripts/ifcfg-eth99',
-      :notify => 'Service[network]'
+      :path   => '/etc/sysconfig/network-scripts/ifcfg-test99',
+      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
     )}
-    it 'should contain File[ifcfg-eth99] with required contents' do
-      verify_contents(catalogue, 'ifcfg-eth99', [
+    it 'should contain File[ifcfg-test99] with required contents' do
+      verify_contents(catalogue, 'ifcfg-test99', [
         'DEVICE=eth99',
         'BOOTPROTO=dhcp',
         'HWADDR=ff:aa:ff:aa:ff:aa',
@@ -46,13 +47,14 @@ describe 'network::if::dynamic', :type => 'define' do
         'NM_CONTROLLED=yes',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
   end
 
   context 'optional parameters' do
-    let(:title) { 'eth99' }
+    let(:title) { 'test99' }
     let :params do {
       :ensure          => 'down',
+      :device          => 'eth99',
       :macaddress      => 'ef:ef:ef:ef:ef:ef',
       :bootproto       => 'bootp',
       :userctl         => true,
@@ -72,16 +74,16 @@ describe 'network::if::dynamic', :type => 'define' do
       :macaddress_eth99 => 'ff:aa:ff:aa:ff:aa',
     }
     end
-    it { should contain_file('ifcfg-eth99').with(
+    it { should contain_file('ifcfg-test99').with(
       :ensure => 'present',
       :mode   => '0644',
       :owner  => 'root',
       :group  => 'root',
-      :path   => '/etc/sysconfig/network-scripts/ifcfg-eth99',
-      :notify => 'Service[network]'
+      :path   => '/etc/sysconfig/network-scripts/ifcfg-test99',
+      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
     )}
-    it 'should contain File[ifcfg-eth99] with required contents' do
-      verify_contents(catalogue, 'ifcfg-eth99', [
+    it 'should contain File[ifcfg-test99] with required contents' do
+      verify_contents(catalogue, 'ifcfg-test99', [
         'DEVICE=eth99',
         'BOOTPROTO=bootp',
         'HWADDR=ef:ef:ef:ef:ef:ef',
@@ -96,10 +98,10 @@ describe 'network::if::dynamic', :type => 'define' do
         'DEFROUTE=yes',
         'ZONE=trusted',
         'METRIC=10',
-        'NM_CONTROLLED=no',
+        'NM_CONTROLLED=yes',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
   end
 
   context 'optional parameters - vlan' do
@@ -116,7 +118,7 @@ describe 'network::if::dynamic', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-eth45.302',
-      :notify => 'Service[network]'
+      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
     )}
     it 'should contain File[ifcfg-eth45.302] with required contents' do
       verify_contents(catalogue, 'ifcfg-eth45.302', [
@@ -129,13 +131,14 @@ describe 'network::if::dynamic', :type => 'define' do
         'NM_CONTROLLED=no',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
   end
 
   context 'optional parameters - manage_hwaddr' do
-    let(:title) { 'eth0' }
+    let(:title) { 'test0' }
     let :params do {
       :ensure        => 'up',
+      :device        => 'eth0',
       :manage_hwaddr => false,
     }
     end
@@ -144,25 +147,25 @@ describe 'network::if::dynamic', :type => 'define' do
       :macaddress_eth0 => 'bb:cc:bb:cc:bb:cc',
     }
     end
-    it { should contain_file('ifcfg-eth0').with(
+    it { should contain_file('ifcfg-test0').with(
       :ensure => 'present',
       :mode   => '0644',
       :owner  => 'root',
       :group  => 'root',
-      :path   => '/etc/sysconfig/network-scripts/ifcfg-eth0',
-      :notify => 'Service[network]'
+      :path   => '/etc/sysconfig/network-scripts/ifcfg-test0',
+      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
     )}
-    it 'should contain File[ifcfg-eth0] with required contents' do
-      verify_contents(catalogue, 'ifcfg-eth0', [
+    it 'should contain File[ifcfg-test0] with required contents' do
+      verify_contents(catalogue, 'ifcfg-test0', [
         'DEVICE=eth0',
         'BOOTPROTO=dhcp',
         'ONBOOT=yes',
         'HOTPLUG=yes',
         'TYPE=Ethernet',
-        'NM_CONTROLLED=no',
+        'NM_CONTROLLED=yes',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
   end
 
 

@@ -15,6 +15,7 @@ include network
 # bonded master interface - static
 network::bond::static { 'bond0':
   ensure       => 'up',
+  device       => 'bond0',
   ipaddress    => '1.2.3.5',
   netmask      => '255.255.255.0',
   gateway      => '1.2.3.1',
@@ -26,14 +27,16 @@ network::bond::static { 'bond0':
 }
 
 # bonded slave interface - static
-network::bond::slave { 'eth1':
+network::bond::slave { 'slave1':
+  device       => 'eth1',
   macaddress   => $::macaddress_eth1,
   ethtool_opts => 'speed 1000 duplex full autoneg off',
   master       => 'bond0',
 }
 
 # bonded slave interface - static
-network::bond::slave { 'eth3':
+network::bond::slave { 'slave3':
+  device       => 'eth3',
   macaddress   => $::macaddress_eth3,
   ethtool_opts => 'speed 100 duplex half autoneg off',
   master       => 'bond0',

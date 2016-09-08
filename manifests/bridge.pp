@@ -33,6 +33,7 @@
 #
 define network::bridge (
   $ensure,
+  $device,
   $userctl = false,
   $stp = false,
   $delay = '30',
@@ -51,7 +52,7 @@ define network::bridge (
 
   include '::network'
 
-  $interface = $name
+  $ifname = $title
   $bootproto = 'none'
   $ipaddress = undef
   $netmask = undef
@@ -65,14 +66,14 @@ define network::bridge (
     default => undef,
   }
 
-  file { "ifcfg-${interface}":
+  file { "ifcfg-${ifname}":
     ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    path    => "/etc/sysconfig/network-scripts/ifcfg-${interface}",
+    path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     content => template('network/ifcfg-br.erb'),
     require => Package['bridge-utils'],
-    notify  => Service['network'],
+    notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
   }
 } # define network::bridge

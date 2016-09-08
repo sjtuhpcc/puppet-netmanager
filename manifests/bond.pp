@@ -43,6 +43,8 @@ define network::bond (
 
   network_if_base { $title:
     ensure       => $ensure,
+    ifname       => $title,
+    device       => $title,
     ipaddress    => '',
     netmask      => '',
     gateway      => '',

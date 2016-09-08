@@ -34,6 +34,7 @@
 #
 define network::bond::bridge (
   $ensure,
+  $device,
   $bridge,
   $mtu = undef,
   $ethtool_opts = undef,
@@ -45,6 +46,8 @@ define network::bond::bridge (
 
   network_if_base { $title:
     ensure       => $ensure,
+    ifname       => $title,
+    device       => $title,
     ipaddress    => '',
     netmask      => '',
     gateway      => '',

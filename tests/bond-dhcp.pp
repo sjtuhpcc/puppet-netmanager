@@ -12,6 +12,7 @@ include network
 # bonded master interface - dhcp
 network::bond::dynamic { 'bond2':
   ensure       => 'up',
+  device       => 'bond2',
   mtu          => '9000',
   ethtool_opts => 'speed 1000 duplex full autoneg off',
   bonding_opts => 'mode=active-backup arp_interval=60 arp_ip_target=192.168.1.254',

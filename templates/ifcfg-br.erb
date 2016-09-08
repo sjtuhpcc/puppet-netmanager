@@ -1,7 +1,8 @@
 ###
 ### File managed by Puppet
 ###
-DEVICE=<%= @interface %>
+DEVICE=<%= @device %>
+NAME=<%= @ifname %>
 BOOTPROTO=<%= @bootproto %>
 ONBOOT=<%= @onboot %>
 TYPE=Bridge
@@ -38,4 +39,4 @@ DELAY=<%= @delay %>
 <% end -%>
 <% if @scope %>SCOPE="<%= @scope %>"
 <% end -%>
-NM_CONTROLLED=no
+NM_CONTROLLED=yes

@@ -50,6 +50,7 @@
 #
 define network::bridge::static (
   $ensure,
+  $device,
   $ipaddress,
   $netmask,
   $gateway = undef,
@@ -86,7 +87,7 @@ define network::bridge::static (
 
   include '::network'
 
-  $interface = $name
+  $ifname = $title
 
   # Deal with the case where $dns2 is non-empty and $dns1 is empty.
   if $dns2 {
@@ -108,12 +109,12 @@ define network::bridge::static (
     default => undef,
   }
 
-  file { "ifcfg-${interface}":
+  file { "ifcfg-${ifname}":
     ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    path    => "/etc/sysconfig/network-scripts/ifcfg-${interface}",
+    path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     content => template('network/ifcfg-br.erb'),
     require => Package['bridge-utils'],
     notify  => Service['network'],

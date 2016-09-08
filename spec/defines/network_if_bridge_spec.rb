@@ -34,7 +34,7 @@ describe 'network::if::bridge', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-eth1',
-      :notify => 'Service[network]'
+      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
     )}
     it 'should contain File[ifcfg-eth1] with required contents' do
       verify_contents(catalogue, 'ifcfg-eth1', [
@@ -45,10 +45,10 @@ describe 'network::if::bridge', :type => 'define' do
         'TYPE=Ethernet',
         'PEERDNS=no',
         'BRIDGE=br0',
-        'NM_CONTROLLED=no',
+        'NM_CONTROLLED=yes',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
   end
 
   context 'optional parameters' do
@@ -72,7 +72,7 @@ describe 'network::if::bridge', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-eth1',
-      :notify => 'Service[network]'
+      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
     )}
     it 'should contain File[ifcfg-eth1] with required contents' do
       verify_contents(catalogue, 'ifcfg-eth1', [
@@ -85,10 +85,10 @@ describe 'network::if::bridge', :type => 'define' do
         'MTU=9000',
         'ETHTOOL_OPTS="speed 1000 duplex full autoneg off"',
         'BRIDGE=br55',
-        'NM_CONTROLLED=no',
+        'NM_CONTROLLED=yes',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
   end
 
 end
