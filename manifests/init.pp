@@ -204,27 +204,30 @@ define network_if_base (
     owner   => 'root',
     group   => 'root',
     content => $iftemplate,
-    notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+    notify  => Exec['nmcli_config']
   }
 
   exec { 'nmcli_clean':
     path    => '/usr/bin:/bin:/usr/sbin:/sbin',
     command => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
-    onlyif  => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'"
+    onlyif  => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'",
+    require   => Exec['nmcli_manage']
   }
 
   exec { 'nmcli_config':
     path        => '/usr/bin:/bin:/usr/sbin:/sbin',
     command     => "nmcli connection load /etc/sysconfig/network-scripts/ifcfg-${ifname}",
     refreshonly => true,
-    before      => Exec['nmcli_manage'],
+    notify      => Exec['nmcli_manage'],
   }
 
   exec { 'nmcli_manage':
     path        => '/usr/bin:/bin:/usr/sbin:/sbin',
     command     => "nmcli connection ${ensure} ${ifname}",
     refreshonly => true,
-    before      => Exec['nmcli_clean'],
+    notify      => Exec['nmcli_clean'],
+    require   => Exec['nmcli_config']
+    
   }
 
 } # define network_if_base

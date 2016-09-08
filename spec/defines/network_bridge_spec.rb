@@ -43,7 +43,7 @@ describe 'network::bridge', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-br1',
-      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-br1] with required contents' do
       verify_contents(catalogue, 'ifcfg-br1', [
@@ -81,7 +81,7 @@ describe 'network::bridge', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-br1',
-      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-br1] with required contents' do
       verify_contents(catalogue, 'ifcfg-br1', [

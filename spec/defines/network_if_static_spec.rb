@@ -89,7 +89,7 @@ describe 'network::if::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test1',
-      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-test1] with required contents' do
       verify_contents(catalogue, 'ifcfg-test1', [
@@ -147,7 +147,7 @@ describe 'network::if::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test1',
-      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-test1] with required contents' do
       verify_contents(catalogue, 'ifcfg-test1', [
@@ -187,7 +187,6 @@ describe 'network::if::static', :type => 'define' do
     let(:title) { 'eth6.203' }
     let :params do {
       :ensure    => 'up',
-      :device    => 'eth6',
       :ipaddress => '1.2.3.4',
       :netmask   => '255.255.255.0',
     }
@@ -203,7 +202,7 @@ describe 'network::if::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-eth6.203',
-      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-eth6.203] with required contents' do
       verify_contents(catalogue, 'ifcfg-eth6.203', [
@@ -241,7 +240,7 @@ describe 'network::if::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test0',
-      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-eth0] with required contents' do
       verify_contents(catalogue, 'ifcfg-test0', [
@@ -300,7 +299,7 @@ describe 'network::if::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test1',
-      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-eth1] with required contents' do
       verify_contents(catalogue, 'ifcfg-test1', [
@@ -347,7 +346,7 @@ describe 'network::if::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test1',
-      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-test1] with required contents' do
       verify_contents(catalogue, 'ifcfg-test1', [
