@@ -5,6 +5,8 @@
 # === Parameters:
 #
 #   $ensure         - required - up|down
+#   $ifname         - optional - default $title 
+#   $device         - required - device name
 #   $ipaddress      - required
 #   $netmask        - required
 #   $gateway        - optional
@@ -30,19 +32,20 @@
 #
 # === Actions:
 #
-# Deploys the file /etc/sysconfig/network-scripts/ifcfg-$name.
+# Deploys the file /etc/sysconfig/network-scripts/ifcfg-$ifname.
 #
 # === Sample Usage:
 #
-#   network::if::static { 'eth0':
+#   network::if::static { 'test0':
 #     ensure      => 'up',
+#     device      => 'eth0',
 #     ipaddress   => '10.21.30.248',
 #     netmask     => '255.255.255.128',
 #     macaddress  => $::macaddress_eth0,
 #     domain      => 'is.domain.com domain.com',
 #     ipv6init    => true,
-#     ipv6address => '123:4567:89ab:cdef:123:4567:89ab:cdef'
-#     ipv6gateway => '123:4567:89ab:cdef:123:4567:89ab:1' 
+#     ipv6address => '123:4567:89ab:cdef:123:4567:89ab:cdef',
+#     ipv6gateway => '123:4567:89ab:cdef:123:4567:89ab:1',
 #   }
 #
 # === Authors:
@@ -57,6 +60,7 @@ define network::if::static (
   $ensure,
   $ipaddress,
   $netmask,
+  $device = $title,
   $gateway = undef,
   $ipv6address = undef,
   $ipv6init = false,
@@ -81,14 +85,22 @@ define network::if::static (
 ) {
   # Validate our data
   if ! is_ip_address($ipaddress) { fail("${ipaddress} is not an IP address.") }
-  if $ipv6address {
+  if is_array($ipv6address) {
+    if size($ipv6address) > 0 {
+      validate_ip_address { $ipv6address: }
+      $primary_ipv6address = $ipv6address[0]
+      $secondary_ipv6addresses = delete_at($ipv6address, 0)
+    }
+  } elsif $ipv6address {
     if ! is_ip_address($ipv6address) { fail("${ipv6address} is not an IPv6 address.") }
+    $primary_ipv6address = $ipv6address
+    $secondary_ipv6addresses = undef
   }
 
   if ! is_mac_address($macaddress) {
     # Strip off any tailing VLAN (ie eth5.90 -> eth5).
-    $title_clean = regsubst($title,'^(\w+)\.\d+$','\1')
-    $macaddy = getvar("::macaddress_${title_clean}")
+    $device_clean = regsubst($device,'^(\w+)\.\d+$','\1')
+    $macaddy = getvar("::macaddress_${device_clean}")
   } else {
     $macaddy = $macaddress
   }
@@ -102,30 +114,33 @@ define network::if::static (
   validate_bool($flush)
 
   network_if_base { $title:
-    ensure        => $ensure,
-    ipv6init      => $ipv6init,
-    ipaddress     => $ipaddress,
-    ipv6address   => $ipv6address,
-    netmask       => $netmask,
-    gateway       => $gateway,
-    ipv6gateway   => $ipv6gateway,
-    ipv6autoconf  => $ipv6autoconf,
-    macaddress    => $macaddy,
-    manage_hwaddr => $manage_hwaddr,
-    bootproto     => 'none',
-    userctl       => $userctl,
-    mtu           => $mtu,
-    ethtool_opts  => $ethtool_opts,
-    peerdns       => $peerdns,
-    ipv6peerdns   => $ipv6peerdns,
-    dns1          => $dns1,
-    dns2          => $dns2,
-    domain        => $domain,
-    linkdelay     => $linkdelay,
-    scope         => $scope,
-    flush         => $flush,
-    zone          => $zone,
-    defroute      => $defroute,
-    metric        => $metric,
+    ensure          => $ensure,
+    ifname          => $title,
+    device          => $device,
+    ipv6init        => $ipv6init,
+    ipaddress       => $ipaddress,
+    ipv6address     => $primary_ipv6address,
+    netmask         => $netmask,
+    gateway         => $gateway,
+    ipv6gateway     => $ipv6gateway,
+    ipv6autoconf    => $ipv6autoconf,
+    ipv6secondaries => $secondary_ipv6addresses,
+    macaddress      => $macaddy,
+    manage_hwaddr   => $manage_hwaddr,
+    bootproto       => 'none',
+    userctl         => $userctl,
+    mtu             => $mtu,
+    ethtool_opts    => $ethtool_opts,
+    peerdns         => $peerdns,
+    ipv6peerdns     => $ipv6peerdns,
+    dns1            => $dns1,
+    dns2            => $dns2,
+    domain          => $domain,
+    linkdelay       => $linkdelay,
+    scope           => $scope,
+    flush           => $flush,
+    zone            => $zone,
+    defroute        => $defroute,
+    metric          => $metric,
   }
 } # define network::if::static

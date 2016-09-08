@@ -25,14 +25,13 @@ describe 'network::global', :type => 'class' do
       :fqdn                   => 'localhost.localdomain',
     }
     end
-    it { should contain_class('network') }
     it { should contain_file('network.sysconfig').with(
       :ensure => 'present',
       :mode   => '0644',
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network',
-      :notify => 'Service[network]'
+      :notify => 'Exec[nmcli_global]'
     )}
     it 'should contain File[network.sysconfig] with correct contents' do
       verify_contents(catalogue, 'network.sysconfig', [

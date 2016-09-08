@@ -90,7 +90,7 @@ describe 'network::bridge::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-br1',
-      :notify => 'Service[network]'
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-br1] with required contents' do
       verify_contents(catalogue, 'ifcfg-br1', [
@@ -101,10 +101,10 @@ describe 'network::bridge::static', :type => 'define' do
         'PEERDNS=no',
         'DELAY=30',
         'STP=no',
-        'NM_CONTROLLED=no',
+        'NM_CONTROLLED=yes',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
     it { should contain_package('bridge-utils') }
   end
 
@@ -140,7 +140,7 @@ describe 'network::bridge::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-br1',
-      :notify => 'Service[network]'
+      :notify => 'Exec[nmcli_config]'
     )}
     it 'should contain File[ifcfg-br1] with required contents' do
       verify_contents(catalogue, 'ifcfg-br1', [
@@ -163,10 +163,10 @@ describe 'network::bridge::static', :type => 'define' do
         'STP=yes',
         'BRIDGING_OPTS="hello_time=200 priority=65535"',
         'SCOPE="peer 1.2.3.1"',
-        'NM_CONTROLLED=no',
+        'NM_CONTROLLED=yes',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
     it { should contain_package('bridge-utils') }
   end
 

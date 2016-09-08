@@ -42,6 +42,7 @@ define network::bond::static (
   $ensure,
   $ipaddress,
   $netmask,
+  $device = $title,
   $gateway = undef,
   $mtu = undef,
   $ethtool_opts = undef,
@@ -73,6 +74,8 @@ define network::bond::static (
 
   network_if_base { $title:
     ensure       => $ensure,
+    ifname       => $title,
+    device       => $device,
     ipaddress    => $ipaddress,
     netmask      => $netmask,
     gateway      => $gateway,

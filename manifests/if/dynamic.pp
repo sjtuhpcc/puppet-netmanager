@@ -5,6 +5,8 @@
 # === Parameters:
 #
 #   $ensure          - required - up|down
+#   $ifname          - optional - default $title 
+#   $device          - required - device name
 #   $macaddress      - optional - defaults to macaddress_$title
 #   $manage_hwaddr   - optional - defaults to true
 #   $bootproto       - optional - defaults to "dhcp"
@@ -21,17 +23,19 @@
 #
 # === Actions:
 #
-# Deploys the file /etc/sysconfig/network-scripts/ifcfg-$name.
+# Deploys the file /etc/sysconfig/network-scripts/ifcfg-$ifname.
 #
 # === Sample Usage:
 #
-#   network::if::dynamic { 'eth2':
+#   network::if::dynamic { 'test2':
 #     ensure     => 'up',
+#     device     => 'eth2',
 #     macaddress => $::macaddress_eth2,
 #   }
 #
-#   network::if::dynamic { 'eth3':
+#   network::if::dynamic { 'test3':
 #     ensure     => 'up',
+#     device     => 'eth3',
 #     macaddress => 'fe:fe:fe:fe:fe:fe',
 #     bootproto  => 'bootp',
 #   }
@@ -46,6 +50,7 @@
 #
 define network::if::dynamic (
   $ensure,
+  $device          = $title,
   $macaddress      = undef,
   $manage_hwaddr   = true,
   $bootproto       = 'dhcp',
@@ -66,8 +71,8 @@ define network::if::dynamic (
 
   if ! is_mac_address($macaddress) {
     # Strip off any tailing VLAN (ie eth5.90 -> eth5).
-    $title_clean = regsubst($title,'^(\w+)\.\d+$','\1')
-    $macaddy = getvar("::macaddress_${title_clean}")
+    $device_clean = regsubst($device,'^(\w+)\.\d+$','\1')
+    $macaddy = getvar("::macaddress_${device_clean}")
   } else {
     $macaddy = $macaddress
   }
@@ -78,6 +83,8 @@ define network::if::dynamic (
 
   network_if_base { $title:
     ensure          => $ensure,
+    ifname          => $title,
+    device          => $device,
     ipaddress       => '',
     netmask         => '',
     gateway         => '',

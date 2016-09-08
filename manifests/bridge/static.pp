@@ -52,6 +52,7 @@ define network::bridge::static (
   $ensure,
   $ipaddress,
   $netmask,
+  $device = $title,
   $gateway = undef,
   $ipv6address = undef,
   $ipv6gateway = undef,
@@ -82,11 +83,11 @@ define network::bridge::static (
   validate_bool($ipv6init)
   validate_bool($ipv6peerdns)
 
-  ensure_packages('bridge-utils')
+  ensure_packages(['bridge-utils'])
 
   include '::network'
 
-  $interface = $name
+  $ifname = $title
 
   # Deal with the case where $dns2 is non-empty and $dns1 is empty.
   if $dns2 {
@@ -108,14 +109,14 @@ define network::bridge::static (
     default => undef,
   }
 
-  file { "ifcfg-${interface}":
+  file { "ifcfg-${ifname}":
     ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    path    => "/etc/sysconfig/network-scripts/ifcfg-${interface}",
+    path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     content => template('network/ifcfg-br.erb'),
     require => Package['bridge-utils'],
-    notify  => Service['network'],
+    notify  => Exec['nmcli_config']
   }
 } # define network::bridge::static

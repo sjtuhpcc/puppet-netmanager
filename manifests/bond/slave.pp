@@ -34,6 +34,7 @@
 define network::bond::slave (
   $macaddress,
   $master,
+  $device = $title,
   $ethtool_opts = undef,
   $zone = undef,
   $defroute = undef,
@@ -46,16 +47,16 @@ define network::bond::slave (
 
   include '::network'
 
-  $interface = $name
+  $ifname = $title
 
-  file { "ifcfg-${interface}":
+  file { "ifcfg-${ifname}":
     ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    path    => "/etc/sysconfig/network-scripts/ifcfg-${interface}",
+    path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     content => template('network/ifcfg-bond.erb'),
     before  => File["ifcfg-${master}"],
-    notify  => Service['network'],
+    notify  => Exec['nmcli_config'],
   }
 } # define network::bond::slave

@@ -1,7 +1,8 @@
 ###
 ### File managed by Puppet
 ###
-DEVICE=<%= @interface %>
+DEVICE=<%= @device %>
+NAME=<%= @ifname %>
 HWADDR=<%= @macaddress %>
 MASTER=<%= @master %>
 SLAVE=yes
@@ -14,4 +15,4 @@ TYPE=Ethernet
 <% end -%>
 <% if @metric %>METRIC=<%= @metric %>
 <% end -%>
-NM_CONTROLLED=no
+NM_CONTROLLED=yes

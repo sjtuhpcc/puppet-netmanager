@@ -36,6 +36,7 @@
 #
 define network::bridge::dynamic (
   $ensure,
+  $device = $title,
   $bootproto = 'dhcp',
   $userctl = false,
   $stp = false,
@@ -49,11 +50,11 @@ define network::bridge::dynamic (
   validate_bool($userctl)
   validate_bool($stp)
 
-  ensure_packages('bridge-utils')
+  ensure_packages(['bridge-utils'])
 
   include '::network'
 
-  $interface = $name
+  $ifname = $title
   $ipaddress = undef
   $netmask = undef
   $gateway = undef
@@ -66,14 +67,14 @@ define network::bridge::dynamic (
     default => undef,
   }
 
-  file { "ifcfg-${interface}":
+  file { "ifcfg-${ifname}":
     ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    path    => "/etc/sysconfig/network-scripts/ifcfg-${interface}",
+    path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     content => template('network/ifcfg-br.erb'),
     require => Package['bridge-utils'],
-    notify  => Service['network'],
+    notify  => Exec['nmcli_config']
   }
 } # define network::bridge::dynamic

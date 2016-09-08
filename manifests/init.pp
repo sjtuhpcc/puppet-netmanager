@@ -31,10 +31,10 @@ class network {
     }
   }
 
-  service { 'network':
+  service { 'NetworkManager':
     ensure     => 'running',
     enable     => true,
-    hasrestart => true,
+    hasrestart => false,
     hasstatus  => true,
     provider   => 'redhat',
   }
@@ -51,11 +51,14 @@ class network {
 # === Parameters:
 #
 #   $ensure          - required - up|down
+#   $ifname          - optional
+#   $device          - required
 #   $ipaddress       - required
 #   $netmask         - required
 #   $macaddress      - required
 #   $manage_hwaddr   - optional - defaults to true
 #   $gateway         - optional
+#   $noaliasrouting  - optional - defaults to false
 #   $bootproto       - optional
 #   $userctl         - optional - defaults to false
 #   $mtu             - optional
@@ -102,15 +105,19 @@ class network {
 #
 define network_if_base (
   $ensure,
+  $ifname,
+  $device,
   $ipaddress,
   $netmask,
   $macaddress,
   $manage_hwaddr   = true,
   $gateway         = undef,
+  $noaliasrouting  = false,
   $ipv6address     = undef,
   $ipv6gateway     = undef,
   $ipv6init        = false,
   $ipv6autoconf    = false,
+  $ipv6secondaries = undef,
   $bootproto       = 'none',
   $userctl         = false,
   $mtu             = undef,
@@ -133,6 +140,7 @@ define network_if_base (
   $metric          = undef
 ) {
   # Validate our booleans
+  validate_bool($noaliasrouting)
   validate_bool($userctl)
   validate_bool($isalias)
   validate_bool($peerdns)
@@ -147,8 +155,6 @@ define network_if_base (
   validate_re($ensure, $states, '$ensure must be either "up" or "down".')
 
   include '::network'
-
-  $interface = $name
 
   # Deal with the case where $dns2 is non-empty and $dns1 is empty.
   if $dns2 {
@@ -183,21 +189,65 @@ define network_if_base (
   if $flush {
     exec { 'network-flush':
       user        => 'root',
-      command     => "ip addr flush dev ${interface}",
+      command     => "ip addr flush dev ${device}",
       refreshonly => true,
-      subscribe   => File["ifcfg-${interface}"],
-      before      => Service['network'],
+      subscribe   => File["ifcfg-${ifname}"],
+      before      => Exec['nmcli_manage'],
       path        => '/sbin:/usr/sbin',
     }
   }
 
-  file { "ifcfg-${interface}":
+  file { "ifcfg-${ifname}":
     ensure  => 'present',
+    path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    path    => "/etc/sysconfig/network-scripts/ifcfg-${interface}",
     content => $iftemplate,
-    notify  => Service['network'],
+    notify  => Exec['nmcli_config']
   }
+
+  exec { 'nmcli_clean':
+    path    => '/usr/bin:/bin:/usr/sbin:/sbin',
+    command => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
+    onlyif  => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'",
+    require => Exec['nmcli_manage']
+  }
+
+  exec { 'nmcli_config':
+    path        => '/usr/bin:/bin:/usr/sbin:/sbin',
+    command     => "nmcli connection load /etc/sysconfig/network-scripts/ifcfg-${ifname}",
+    refreshonly => true,
+    notify      => Exec['nmcli_manage'],
+  }
+
+  exec { 'nmcli_manage':
+    path        => '/usr/bin:/bin:/usr/sbin:/sbin',
+    command     => "nmcli connection ${ensure} ${ifname}",
+    refreshonly => true,
+    notify      => Exec['nmcli_clean'],
+    require     => Exec['nmcli_config']
+  }
+
 } # define network_if_base
+
+# == Definition: validate_ip_address
+#
+# This definition can be used to call is_ip_address on an array of ip addresses.
+#
+# === Parameters:
+#
+# None
+#
+# === Actions:
+#
+# Runs is_ip_address on the name of the define and fails if it is not a valid IP address.
+#
+# === Sample Usage:
+#
+# $ips = [ '10.21.30.248', '123:4567:89ab:cdef:123:4567:89ab:cdef' ]
+# validate_ip_address { $ips: }
+#
+define validate_ip_address {
+  if ! is_ip_address($name) { fail("${name} is not an IP(v6) address.") }
+} # define validate_ip_address

@@ -1,8 +1,7 @@
-# == Definition: network::bond::dynamic
+# == Definition: network::bond
 #
-# Creates a bonded interface with static IP address and enables the bonding
-# driver.  bootp support is unknown for bonded interfaces.  Thus no bootp
-# bond support in this module.
+# Creates a bonded interface with no IP information and enables the
+# bonding driver.
 #
 # === Parameters:
 #
@@ -11,8 +10,6 @@
 #   $ethtool_opts - optional
 #   $bonding_opts - optional
 #   $zone         - optional
-#   $metric       - optional
-#   $defroute     - optional
 #
 # === Actions:
 #
@@ -21,27 +18,25 @@
 #
 # === Sample Usage:
 #
-#   network::bond::dynamic { 'bond2':
+#   network::bond { 'bond2':
 #     ensure => 'up',
 #   }
 #
 # === Authors:
 #
-# Mike Arnold <mike@razorsedge.org>
+# Jason Vervlied <jvervlied@3cinteractive.com>
 #
 # === Copyright:
 #
-# Copyright (C) 2011 Mike Arnold, unless otherwise noted.
+# Copyright (C) 2015 Jason Vervlied, unless otherwise noted.
 #
-define network::bond::dynamic (
+define network::bond (
   $ensure,
   $device = $title,
   $mtu = undef,
   $ethtool_opts = undef,
   $bonding_opts = 'miimon=100',
-  $zone = undef,
-  $defroute = undef,
-  $metric = undef
+  $zone = undef
 ) {
   # Validate our regular expressions
   $states = [ '^up$', '^down$' ]
@@ -55,15 +50,13 @@ define network::bond::dynamic (
     netmask      => '',
     gateway      => '',
     macaddress   => '',
-    bootproto    => 'dhcp',
+    bootproto    => 'none',
     ipv6address  => '',
     ipv6gateway  => '',
     mtu          => $mtu,
     ethtool_opts => $ethtool_opts,
     bonding_opts => $bonding_opts,
     zone         => $zone,
-    defroute     => $defroute,
-    metric       => $metric,
   }
 
   # Only install "alias bondN bonding" on old OSs that support
@@ -103,4 +96,4 @@ define network::bond::dynamic (
     }
     default: {}
   }
-} # define network::bond::dynamic
+} # define network::bond

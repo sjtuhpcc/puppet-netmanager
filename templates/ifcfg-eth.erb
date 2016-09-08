@@ -1,7 +1,8 @@
 ###
 ### File managed by Puppet
 ###
-DEVICE=<%= @interface %>
+DEVICE=<%= @device %>
+NAME=<%= @ifname %>
 BOOTPROTO=<%= @bootproto %>
 <% if @manage_hwaddr and @macaddress and @macaddress != '' -%>
 HWADDR=<%= @macaddress %>
@@ -46,6 +47,8 @@ IPV6INIT=yes
 <% if !@ipv6peerdns %>IPV6_PEERDNS=no
 <% else %>IPV6_PEERDNS=yes
 <% end -%>
+<% if @ipv6secondaries and @ipv6secondaries.length > 0 %>IPV6ADDR_SECONDARIES="<%= @ipv6secondaries.join(' ') %>"
+<% end -%>
 <% end -%>
 <% if @bridge %>BRIDGE=<%= @bridge %>
 <% end -%>
@@ -64,4 +67,4 @@ check_link_down() {
 <% end -%>
 <% if @metric %>METRIC=<%= @metric %>
 <% end -%>
-NM_CONTROLLED=no
+NM_CONTROLLED=yes

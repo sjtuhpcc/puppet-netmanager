@@ -5,7 +5,7 @@ require 'spec_helper'
 describe 'network::route', :type => 'define' do
 
   context 'singular parameters' do
-    let(:title) { 'eth1' }
+    let(:title) { 'test1' }
     let :params do {
       :ipaddress => [ '192.168.2.1', ],
       :netmask   => [ '255.255.255.1', ],
@@ -13,25 +13,25 @@ describe 'network::route', :type => 'define' do
     }
     end
     let(:facts) {{ :osfamily => 'RedHat' }}
-    it { should contain_file('route-eth1').with(
+    it { should contain_file('route-test1').with(
       :ensure => 'present',
       :mode   => '0644',
       :owner  => 'root',
       :group  => 'root',
-      :path   => '/etc/sysconfig/network-scripts/route-eth1'
+      :path   => '/etc/sysconfig/network-scripts/route-test1'
     )}
-    it 'should contain File[route-eth1] with contents "ADDRESS0=192.168.2.1\nNETMASK0=255.255.255.1\nGATEWAY0=192.168.1.2"' do
-      verify_contents(catalogue, 'route-eth1', [
+    it 'should contain File[route-test1] with contents "ADDRESS0=192.168.2.1\nNETMASK0=255.255.255.1\nGATEWAY0=192.168.1.2"' do
+      verify_contents(catalogue, 'route-test1', [
         'ADDRESS0=192.168.2.1',
         'NETMASK0=255.255.255.1',
         'GATEWAY0=192.168.1.2',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
   end
 
   context 'array parameters' do
-    let(:title) { 'eth2' }
+    let(:title) { 'test2' }
     let :params do {
       :ipaddress => [ '192.168.2.0', '10.0.0.0', ],
       :netmask   => [ '255.255.255.0', '255.0.0.0', ],
@@ -39,15 +39,15 @@ describe 'network::route', :type => 'define' do
     }
     end
     let(:facts) {{ :osfamily => 'RedHat' }}
-    it { should contain_file('route-eth2').with(
+    it { should contain_file('route-test2').with(
       :ensure => 'present',
       :mode   => '0644',
       :owner  => 'root',
       :group  => 'root',
-      :path   => '/etc/sysconfig/network-scripts/route-eth2'
+      :path   => '/etc/sysconfig/network-scripts/route-test2'
     )}
-    it 'should contain File[route-eth2] with contents "ADDRESS0=192.168.2.0\nADDRESS1=10.0.0.0\nNETMASK0=255.255.255.0\nNETMASK1=255.0.0.0\nGATEWAY0=192.168.1.1\nGATEWAY1=10.0.0.1"' do
-      verify_contents(catalogue, 'route-eth2', [
+    it 'should contain File[route-test2] with contents "ADDRESS0=192.168.2.0\nADDRESS1=10.0.0.0\nNETMASK0=255.255.255.0\nNETMASK1=255.0.0.0\nGATEWAY0=192.168.1.1\nGATEWAY1=10.0.0.1"' do
+      verify_contents(catalogue, 'route-test2', [
         'ADDRESS0=192.168.2.0',
         'ADDRESS1=10.0.0.0',
         'NETMASK0=255.255.255.0',
@@ -56,7 +56,7 @@ describe 'network::route', :type => 'define' do
         'GATEWAY1=10.0.0.1',
       ])
     end
-    it { should contain_service('network') }
+    it { should contain_service('NetworkManager') }
   end
 
 end

@@ -1,14 +1,16 @@
 include network
 
 # normal interface - dhcp
-network::if::dynamic { 'eth70':
+network::if::dynamic { 'test70':
   ensure     => 'up',
+  device     => 'eth70',
   macaddress => 'ff:ff:ff:ff:ff:ff',
 }
 
 # normal interface - static
-network::if::static { 'eth90':
+network::if::static { 'test90':
   ensure       => 'up',
+  device       => 'eth90',
   ipaddress    => '1.2.3.4',
   netmask      => '255.255.255.0',
   gateway      => '1.2.3.1',
