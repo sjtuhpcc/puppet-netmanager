@@ -221,9 +221,10 @@ describe 'network::if::static', :type => 'define' do
   end
 
   context 'optional parameters - manage_hwaddr' do
-    let(:title) { 'eth0' }
+    let(:title) { 'test0' }
     let :params do {
       :ensure         => 'up',
+      :device         => 'eth0',
       :ipaddress      => '1.2.3.4',
       :netmask        => '255.255.255.0',
       :manage_hwaddr  => false,
@@ -242,7 +243,7 @@ describe 'network::if::static', :type => 'define' do
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test0',
       :notify => 'Exec[nmcli_config]'
     )}
-    it 'should contain File[ifcfg-eth0] with required contents' do
+    it 'should contain File[ifcfg-test0] with required contents' do
       verify_contents(catalogue, 'ifcfg-test0', [
         'DEVICE=eth0',
         'BOOTPROTO=none',
@@ -272,7 +273,7 @@ describe 'network::if::static', :type => 'define' do
       :macaddress_eth1 => 'fe:fe:fe:aa:aa:aa',
     }
     end
-    it { should contain_exec('network-flush').with_command('ip addr flush dev eth1').that_comes_before("Exec['nmcli_manage']") }
+    it { should contain_exec('network-flush').with_command('ip addr flush dev eth1').that_comes_before('Exec[nmcli_manage]') }
   end
 
   context 'optional parameters - single ipv6address in array' do
@@ -301,7 +302,7 @@ describe 'network::if::static', :type => 'define' do
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test1',
       :notify => 'Exec[nmcli_config]'
     )}
-    it 'should contain File[ifcfg-eth1] with required contents' do
+    it 'should contain File[ifcfg-test1] with required contents' do
       verify_contents(catalogue, 'ifcfg-test1', [
         'DEVICE=eth1',
         'BOOTPROTO=none',
