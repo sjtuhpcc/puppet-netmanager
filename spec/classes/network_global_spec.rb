@@ -31,7 +31,7 @@ describe 'network::global', :type => 'class' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network',
-      :notify => 'Exec['nmcli_global']'
+      :notify => 'Exec[\'nmcli_global\']'
     )}
     it 'should contain File[network.sysconfig] with correct contents' do
       verify_contents(catalogue, 'network.sysconfig', [
