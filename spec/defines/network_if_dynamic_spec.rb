@@ -34,7 +34,7 @@ describe 'network::if::dynamic', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test99',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-test99] with required contents' do
       verify_contents(catalogue, 'ifcfg-test99', [
@@ -80,7 +80,7 @@ describe 'network::if::dynamic', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test99',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-test99] with required contents' do
       verify_contents(catalogue, 'ifcfg-test99', [
@@ -118,7 +118,7 @@ describe 'network::if::dynamic', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-eth45.302',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-eth45.302] with required contents' do
       verify_contents(catalogue, 'ifcfg-eth45.302', [
@@ -153,7 +153,7 @@ describe 'network::if::dynamic', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-test0',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-test0] with required contents' do
       verify_contents(catalogue, 'ifcfg-test0', [

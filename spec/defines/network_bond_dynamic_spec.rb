@@ -32,7 +32,7 @@ describe 'network::bond::dynamic', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-bond2',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-bond2] with required contents' do
       verify_contents(catalogue, 'ifcfg-bond2', [
@@ -114,7 +114,7 @@ describe 'network::bond::dynamic', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-bond2',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-bond2] with required contents' do
       verify_contents(catalogue, 'ifcfg-bond2', [

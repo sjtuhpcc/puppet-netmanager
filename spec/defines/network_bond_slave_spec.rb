@@ -34,7 +34,7 @@ describe 'network::bond::slave', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-eth1',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-eth1] with required contents' do
       verify_contents(catalogue, 'ifcfg-eth1', [
@@ -68,7 +68,7 @@ describe 'network::bond::slave', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-eth3',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-eth3] with required contents' do
       verify_contents(catalogue, 'ifcfg-eth3', [

@@ -63,7 +63,7 @@ describe 'network::bond::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-bond0',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-bond0] with required contents' do
       verify_contents(catalogue, 'ifcfg-bond0', [
@@ -155,7 +155,7 @@ describe 'network::bond::static', :type => 'define' do
       :owner  => 'root',
       :group  => 'root',
       :path   => '/etc/sysconfig/network-scripts/ifcfg-bond0',
-      :notify  =>"Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']"
+      :notify => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
     )}
     it 'should contain File[ifcfg-bond0] with required contents' do
       verify_contents(catalogue, 'ifcfg-bond0', [

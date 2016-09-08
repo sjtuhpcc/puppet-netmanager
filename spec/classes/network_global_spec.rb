@@ -25,7 +25,6 @@ describe 'network::global', :type => 'class' do
       :fqdn                   => 'localhost.localdomain',
     }
     end
-    it { should contain_class('network') }
     it { should contain_file('network.sysconfig').with(
       :ensure => 'present',
       :mode   => '0644',
