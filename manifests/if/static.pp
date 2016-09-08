@@ -58,9 +58,9 @@
 #
 define network::if::static (
   $ensure,
-  $device = $title,
   $ipaddress,
   $netmask,
+  $device = $title,
   $gateway = undef,
   $ipv6address = undef,
   $ipv6init = false,

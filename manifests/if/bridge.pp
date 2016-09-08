@@ -31,8 +31,8 @@
 #
 define network::if::bridge (
   $ensure,
-  $device = $title,
   $bridge,
+  $device = $title,
   $mtu = undef,
   $ethtool_opts = undef,
   $macaddress = undef

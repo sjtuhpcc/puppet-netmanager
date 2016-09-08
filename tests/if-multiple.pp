@@ -3,7 +3,7 @@ include network
 # normal interface - dhcp
 network::if::dynamic { 'test70':
   ensure     => 'up',
-  device       => 'eth70',
+  device     => 'eth70',
   macaddress => 'ff:ff:ff:ff:ff:ff',
 }
 

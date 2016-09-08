@@ -122,10 +122,10 @@ class network::global (
     content => template('network/network.erb'),
     notify  => Exec['nmcli_global']
   }
-  
+
   exec { 'nmcli_global':
     path        => '/usr/bin:/bin:/usr/sbin:/sbin',
-    command     => "nmcli networking on",
+    command     => 'nmcli networking on',
     refreshonly => true,
   }
 

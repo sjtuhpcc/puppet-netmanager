@@ -50,9 +50,9 @@
 #
 define network::bridge::static (
   $ensure,
-  $device = $title,
   $ipaddress,
   $netmask,
+  $device = $title,
   $gateway = undef,
   $ipv6address = undef,
   $ipv6gateway = undef,

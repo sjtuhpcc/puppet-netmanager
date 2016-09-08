@@ -40,9 +40,9 @@
 #
 define network::bond::static (
   $ensure,
-  $device = $title,
   $ipaddress,
   $netmask,
+  $device = $title,
   $gateway = undef,
   $mtu = undef,
   $ethtool_opts = undef,
