@@ -75,6 +75,6 @@ define network::bridge::dynamic (
     path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     content => template('network/ifcfg-br.erb'),
     require => Package['bridge-utils'],
-    notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
+    notify  => Exec['nmcli_config']
   }
 } # define network::bridge::dynamic

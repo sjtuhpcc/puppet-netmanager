@@ -57,6 +57,6 @@ define network::bond::slave (
     path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     content => template('network/ifcfg-bond.erb'),
     before  => File["ifcfg-${master}"],
-    notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean'],
+    notify  => Exec['nmcli_config'],
   }
 } # define network::bond::slave
