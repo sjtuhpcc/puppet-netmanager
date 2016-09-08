@@ -50,7 +50,7 @@
 #
 define network::if::dynamic (
   $ensure,
-  $device,
+  $device          = $title,
   $macaddress      = undef,
   $manage_hwaddr   = true,
   $bootproto       = 'dhcp',
@@ -84,7 +84,7 @@ define network::if::dynamic (
   network_if_base { $title:
     ensure          => $ensure,
     ifname          => $title,
-    device          => $title,
+    device          => $device,
     ipaddress       => '',
     netmask         => '',
     gateway         => '',

@@ -32,7 +32,7 @@
 # Copyright (C) 2011 Mike Arnold, unless otherwise noted.
 #
 define network::bond::slave (
-  $device,
+  $device = $title,
   $macaddress,
   $master,
   $ethtool_opts = undef,

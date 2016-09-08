@@ -204,7 +204,7 @@ define network_if_base (
     owner   => 'root',
     group   => 'root',
     content => $iftemplate,
-    notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean'],
+    notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
   }
 
   exec { 'nmcli_clean':

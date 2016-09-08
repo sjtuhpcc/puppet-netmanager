@@ -33,7 +33,7 @@
 #
 define network::bridge (
   $ensure,
-  $device,
+  $device = $title,
   $userctl = false,
   $stp = false,
   $delay = '30',

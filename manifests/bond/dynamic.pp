@@ -36,7 +36,7 @@
 #
 define network::bond::dynamic (
   $ensure,
-  $device,
+  $device = $title,
   $mtu = undef,
   $ethtool_opts = undef,
   $bonding_opts = 'miimon=100',
@@ -51,7 +51,7 @@ define network::bond::dynamic (
   network_if_base { $title:
     ensure       => $ensure,
     ifname       => $title,
-    device       => $title,
+    device       => $device,
     ipaddress    => '',
     netmask      => '',
     gateway      => '',

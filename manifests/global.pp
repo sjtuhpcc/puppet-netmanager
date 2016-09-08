@@ -120,13 +120,13 @@ class network::global (
     group   => 'root',
     path    => '/etc/sysconfig/network',
     content => template('network/network.erb'),
-    notify  => Exec['nmcli_global'],
+    notify  => Exec['nmcli_global']
   }
   
   exec { 'nmcli_global':
     path        => '/usr/bin:/bin:/usr/sbin:/sbin',
-    command     => "nmcli networking on ",
+    command     => "nmcli networking on",
     refreshonly => true,
   }
-  
+
 } # class global

@@ -36,7 +36,7 @@
 #
 define network::bridge::dynamic (
   $ensure,
-  $device,
+  $device = $title,
   $bootproto = 'dhcp',
   $userctl = false,
   $stp = false,
@@ -75,6 +75,6 @@ define network::bridge::dynamic (
     path    => "/etc/sysconfig/network-scripts/ifcfg-${ifname}",
     content => template('network/ifcfg-br.erb'),
     require => Package['bridge-utils'],
-    notify  => Service['network'],
+    notify  => Exec['nmcli_config', 'nmcli_manage', 'nmcli_clean']
   }
 } # define network::bridge::dynamic

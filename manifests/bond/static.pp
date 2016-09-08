@@ -40,7 +40,7 @@
 #
 define network::bond::static (
   $ensure,
-  $device,
+  $device = $title,
   $ipaddress,
   $netmask,
   $gateway = undef,
@@ -75,7 +75,7 @@ define network::bond::static (
   network_if_base { $title:
     ensure       => $ensure,
     ifname       => $title,
-    device       => $title,
+    device       => $device,
     ipaddress    => $ipaddress,
     netmask      => $netmask,
     gateway      => $gateway,
