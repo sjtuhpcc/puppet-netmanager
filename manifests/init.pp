@@ -211,7 +211,7 @@ define network_if_base (
     path    => '/usr/bin:/bin:/usr/sbin:/sbin',
     command => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
     onlyif  => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'",
-    require   => Exec['nmcli_manage']
+    require => Exec['nmcli_manage']
   }
 
   exec { 'nmcli_config':
@@ -226,8 +226,7 @@ define network_if_base (
     command     => "nmcli connection ${ensure} ${ifname}",
     refreshonly => true,
     notify      => Exec['nmcli_clean'],
-    require   => Exec['nmcli_config']
-    
+    require     => Exec['nmcli_config']
   }
 
 } # define network_if_base
