@@ -1,12 +1,12 @@
 {
-  "name": "razorsedge-network",
-  "version": "3.8.0",
-  "author": "razorsedge",
-  "summary": "Manage RedHat traditional network configuration via static and dhcp configuration of normal and bonded interfaces as well as bridges and VLANs.",
+  "name": "gorbyo-network",
+  "version": "0.9.0",
+  "author": "gorbyo",
+  "summary": " Manage RedHat network configuration via NMCLI and traditional files.",
   "license": "Apache-2.0",
-  "project_page": "https://github.com/razorsedge/puppet-network",
-  "issues_url": "https://github.com/razorsedge/puppet-network/issues",
-  "source": "https://github.com/razorsedge/puppet-network.git",
+  "project_page": "https://github.com/gorbyo/puppet-netmanager",
+  "issues_url": "https://github.com/gorbyo/puppet-netmanager/issues",
+  "source": "https://github.com/gorbyo/puppet-netmanager.git",
   "tags": [ "network", "networking" ],
   "dependencies": [
     {
@@ -17,15 +17,15 @@
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": [ "5", "6", "7" ]
+      "operatingsystemrelease": [ "6", "7" ]
     },
     {
       "operatingsystem": "CentOS",
-      "operatingsystemrelease": [ "5", "6", "7" ]
+      "operatingsystemrelease": [  "6", "7" ]
     },
     {
       "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": [ "5", "6", "7" ]
+      "operatingsystemrelease": [ "6", "7" ]
     },
     {
       "operatingsystem": "Fedora",

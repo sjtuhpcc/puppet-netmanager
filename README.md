@@ -1,16 +1,17 @@
 Puppet Network Module
 =====================
 
-upstream-master branch [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-network.png?branch=master)](http://travis-ci.org/razorsedge/puppet-network)
-upstream-develop branch [![Build Status](https://secure.travis-ci.org/razorsedge/puppet-network.png?branch=develop)](http://travis-ci.org/razorsedge/puppet-network)
+master branch [![Build Status](https://secure.travis-ci.org/gorbyo/puppet-netmanager.png?branch=master)](http://travis-ci.org/gorbyo/puppet-netmanager)
+develop branch [![Build Status](https://secure.travis-ci.org/gorbyo/puppet-netmanager.png?branch=develop)](http://travis-ci.org/gorbyo/puppet-netmanager)
 
-master branch [![Build Status](https://secure.travis-ci.org/gorbyo/puppet-network.png?branch=master)](http://travis-ci.org/gorbyo/puppet-network)
-develop branch [![Build Status](https://secure.travis-ci.org/gorbyo/puppet-network.png?branch=develop)](http://travis-ci.org/gorbyo/puppet-network)
+Thanks
+------
+Mike Arnold <mike@razorsedge.org> for his network module wich I can use as base
+
 
 Introduction
 ------------
-
-This module manages Red Hat/Fedora traditional network configuration.
+This module forked from https://github.com/razorsedge/puppet-network with aim to manage RedHat network configuration via NMCLI and traditional files.
 
 It allows for static, dhcp, and bootp configuration of normal and bonded interfaces as well as bridges and VLANs.  There is support for aliases on interfaces as well as alias ranges.  It can configure static routes.  It can configure MTU, DHCP_HOSTNAME, ETHTOOL_OPTS, and BONDING_OPTS on a per-interface basis.
 
@@ -378,4 +379,8 @@ Copyright (C) 2011 Mike Arnold <mike@razorsedge.org>
 [razorsedge/puppet-network on GitHub](https://github.com/razorsedge/puppet-network)
 
 [razorsedge/network on Puppet Forge](http://forge.puppetlabs.com/razorsedge/network)
+
+Copyright (C) 2016 Oleh Horbachov <gorbyo@gmail.com>
+
+[gorbyo/puppet-netmanager on GitHub](https://github.com/gorbyo/puppet-netmanager)
 
