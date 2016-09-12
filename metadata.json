@@ -1,6 +1,6 @@
 {
   "name": "gorbyo-network",
-  "version": "0.9.0",
+  "version": "4.0.0",
   "author": "gorbyo",
   "summary": " Manage RedHat network configuration via NMCLI and traditional files.",
   "license": "Apache-2.0",
