@@ -1,4 +1,4 @@
-Puppet Network Module
+Puppet Netmanager Module
 =====================
 
 master branch [![Build Status](https://secure.travis-ci.org/gorbyo/puppet-netmanager.png?branch=master)](http://travis-ci.org/gorbyo/puppet-netmanager)
