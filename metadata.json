@@ -1,7 +1,7 @@
 {
   "name": "gorbyo-network",
   "version": "4.0.0",
-  "author": "gorbyo",
+  "author": "Oleh Horbachov",
   "summary": " Manage RedHat network configuration via NMCLI and traditional files.",
   "license": "Apache-2.0",
   "project_page": "https://github.com/gorbyo/puppet-netmanager",
