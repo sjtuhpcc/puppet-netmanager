@@ -43,6 +43,7 @@
 #     netmask     => '255.255.255.128',
 #     macaddress  => $::macaddress_eth0,
 #     domain      => 'is.domain.com domain.com',
+#     zone        => 'public',
 #     ipv6init    => true,
 #     ipv6address => '123:4567:89ab:cdef:123:4567:89ab:cdef',
 #     ipv6gateway => '123:4567:89ab:cdef:123:4567:89ab:1',
