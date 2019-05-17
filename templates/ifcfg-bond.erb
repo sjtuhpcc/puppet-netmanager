@@ -6,7 +6,10 @@ NAME=<%= @ifname %>
 HWADDR=<%= @macaddress %>
 MASTER=<%= @master %>
 SLAVE=yes
+<% if @type %>TYPE=<%= @type %>
+<% else %>
 TYPE=Ethernet
+<% end -%>
 <% if @ethtool_opts %>ETHTOOL_OPTS="<%= @ethtool_opts %>"
 <% end -%>
 <% if @defroute %>DEFROUTE=<%= @defroute %>

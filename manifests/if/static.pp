@@ -29,6 +29,7 @@
 #   $zone           - optional
 #   $metric         - optional
 #   $defroute       - optional
+#   $type           - optional
 #
 # === Actions:
 #
@@ -82,7 +83,8 @@ define network::if::static (
   $flush = false,
   $zone = undef,
   $defroute = undef,
-  $metric = undef
+  $metric = undef,
+  $type = undef,
 ) {
   # Validate our data
   if ! is_ip_address($ipaddress) { fail("${ipaddress} is not an IP address.") }
@@ -143,5 +145,6 @@ define network::if::static (
     zone            => $zone,
     defroute        => $defroute,
     metric          => $metric,
+    type            => $type,
   }
 } # define network::if::static
