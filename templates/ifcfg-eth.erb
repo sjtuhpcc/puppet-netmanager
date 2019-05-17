@@ -10,8 +10,7 @@ HWADDR=<%= @macaddress %>
 ONBOOT=<%= @onboot %>
 HOTPLUG=<%= @onboot %>
 <% if @type %>TYPE=<%= @type %>
-<% else %>
-TYPE=Ethernet
+<% else %>TYPE=Ethernet
 <% end -%>
 <% if @ipaddress and @ipaddress != '' %>IPADDR=<%= @ipaddress %>
 <% end -%>
