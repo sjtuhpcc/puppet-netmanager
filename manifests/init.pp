@@ -213,23 +213,23 @@ define network_if_base (
     owner   => 'root',
     group   => 'root',
     content => $iftemplate,
-    notify  => Exec['nmcli_config']
+    notify  => Exec["nmcli_config_${ifname}"]
   }
 
 
-  exec { 'nmcli_config':
+  exec { "nmcli_config_${ifname}":
     path        => '/usr/bin:/bin:/usr/sbin:/sbin',
     command     => "nmcli connection load /etc/sysconfig/network-scripts/ifcfg-${ifname}",
     refreshonly => true,
-    notify      => Exec['nmcli_manage'],
+    notify      => Exec["nmcli_manage_${ifname}"],
   }
 
-  exec { 'nmcli_manage':
+  exec { "nmcli_manage_${ifname}":
     path        => '/usr/bin:/bin:/usr/sbin:/sbin',
     command     => "nmcli connection ${ensure} ${ifname}",
     refreshonly => true,
     notify      => Exec['nmcli_clean'],
-    require     => Exec['nmcli_config']
+    require     => Exec["nmcli_config_${ifname}"]
   }
 
 } # define network_if_base
