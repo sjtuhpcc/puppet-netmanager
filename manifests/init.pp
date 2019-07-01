@@ -38,6 +38,14 @@ class network {
     hasstatus  => true,
     provider   => 'redhat',
   }
+
+  exec { 'nmcli_clean':
+    path    => '/usr/bin:/bin:/usr/sbin:/sbin',
+    command => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
+    onlyif  => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'",
+    require => Exec['nmcli_manage']
+  }
+
 } # class network
 
 # == Definition: network_if_base
@@ -208,12 +216,6 @@ define network_if_base (
     notify  => Exec['nmcli_config']
   }
 
-  exec { 'nmcli_clean':
-    path    => '/usr/bin:/bin:/usr/sbin:/sbin',
-    command => "nmcli connection delete $(nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'|awk \'{print \$1}\')",
-    onlyif  => "nmcli -f UUID,DEVICE connection show|grep \'\\-\\-\'",
-    require => Exec['nmcli_manage']
-  }
 
   exec { 'nmcli_config':
     path        => '/usr/bin:/bin:/usr/sbin:/sbin',
