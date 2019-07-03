@@ -36,7 +36,6 @@ class network {
     enable     => true,
     hasrestart => false,
     hasstatus  => true,
-    provider   => 'redhat',
   }
 
 } # class network
